@@ -39,17 +39,6 @@ def call(Map pipelineParams) {
                 }
             }
 
-            stage('Debug') {
-                steps{
-                    sh "set"
-                    echo "============================================================"
-                    sh "env"
-                    echo "============================================================"
-                    echo "Building $env.BRANCH_NAME"
-                    echo "Building $env.TAG_NAME"
-                }
-            }
-
             stage('Build') {
                 steps {
                     sh "$GRADLE_CMD clean build -x test"
@@ -65,7 +54,7 @@ def call(Map pipelineParams) {
             stage('Publish to:\nLocal Nexus\nMaven Central\nWarpFleet') {
                 when {
                     beforeInput true
-                    expression { git.isTag() }
+                    expression { gitUtils.isTag() }
                 }
                 options {
                     timeout(time: 4, unit: 'DAYS')
