@@ -65,7 +65,7 @@ def call(Map pipelineParams) {
             stage('Publish to:\nLocal Nexus\nMaven Central\nWarpFleet') {
                 when {
                     beforeInput true
-                    buildingTag()
+                    expression { git.isTag() }
                 }
                 options {
                     timeout(time: 4, unit: 'DAYS')
