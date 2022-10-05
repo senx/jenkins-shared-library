@@ -2,7 +2,7 @@
 def slack(String buildStatus) {
     // build status of null means successful
     buildStatus = buildStatus ?: 'SUCCESSFUL'
-    String subject = "${buildStatus}: Job ${env.JOB_NAME} [${env.BUILD_DISPLAY_NAME}] | ${version}" as String
+    String subject = "${buildStatus}: Job ${env.JOB_NAME} [${env.BUILD_DISPLAY_NAME}] | ${env.version}" as String
     String message = "${subject} (${env.BUILD_URL})" as String
 
     // Override default values based on build status
