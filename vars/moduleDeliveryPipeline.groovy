@@ -63,7 +63,7 @@ def call(Map pipelineParams) {
                     timeout(time: 4, unit: 'DAYS')
                 }
                 input {
-                    message "Should we deploy module to\n'Maven Central',\n'Local Nexus',\n and WarpFleet?"
+                    message "Should we deploy module to:\n'Local Nexus',\n'Maven Central',\n and WarpFleet?"
                 }
                 steps {
                     sh "$GRADLE_CMD publish closeAndReleaseStagingRepository"
