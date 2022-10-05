@@ -34,8 +34,11 @@ def call(Map pipelineParams) {
                     script {
                         version = ""
                     }
-                    // notify.build('STARTED')
+                    notify.slack('STARTED')
                     git url: pipelineParams.scmUrl
+                    script {
+                        version = git.getVersion()
+                    }
                 }
             }
 
@@ -65,23 +68,22 @@ def call(Map pipelineParams) {
                 steps {
                     sh "$GRADLE_CMD publish closeAndReleaseStagingRepository"
                     echo "wf publish"
-                    // notify.build('SUCCESSFUL')
                 }
             }
         }
-        // post {
-        //     success {
-        //         notify.build('SUCCESSFUL')
-        //     }
-        //     failure {
-        //         notify.build('FAILURE')
-        //     }
-        //     aborted {
-        //         notify.build('ABORTED')
-        //     }
-        //     unstable {
-        //         notify.build('UNSTABLE')
-        //     }
-        // }
+        post {
+            success {
+                notify.slack('SUCCESSFUL')
+            }
+            failure {
+                notify.slack('FAILURE')
+            }
+            aborted {
+                notify.slack('ABORTED')
+            }
+            unstable {
+                notify.slack('UNSTABLE')
+            }
+        }
     }
 }
