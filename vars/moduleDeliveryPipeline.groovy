@@ -37,7 +37,7 @@ def call(Map pipelineParams) {
                     notify.slack('STARTED')
                     git url: pipelineParams.scmUrl
                     script {
-                        version = git.getVersion()
+                        version = gitUtils.getVersion()
                     }
                 }
             }
