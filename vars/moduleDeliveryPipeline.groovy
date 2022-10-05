@@ -33,8 +33,8 @@ def call(Map pipelineParams) {
                 steps {
                     script {
                         version = ""
+                        notify.slack('STARTED')
                     }
-                    notify.slack('STARTED')
                     git url: pipelineParams.scmUrl
                     script {
                         version = gitUtils.getVersion()
@@ -73,16 +73,24 @@ def call(Map pipelineParams) {
         }
         post {
             success {
-                notify.slack('SUCCESSFUL')
+                script {
+                    notify.slack('SUCCESSFUL')
+                }
             }
             failure {
-                notify.slack('FAILURE')
+                script {
+                    notify.slack('FAILURE')
+                }
             }
             aborted {
-                notify.slack('ABORTED')
+                script {
+                    notify.slack('ABORTED')
+                }
             }
             unstable {
-                notify.slack('UNSTABLE')
+                script {
+                    notify.slack('UNSTABLE')
+                }
             }
         }
     }
