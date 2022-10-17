@@ -11,7 +11,7 @@ def call(Map pipelineParams) {
 
         parameters {
             string(name: 'nexusHost', defaultValue: 'http://localhost:8081', description: 'Local Nexus')
-            string(name: 'gpgKeyName', defaultValue: 'BD49DA0A', description: 'Gpg key to sign the artifacts')
+            string(name: 'gpgKeyName', defaultValue: 'BD49DA0A', description: 'GPG key to sign the artifacts')
         }
 
         environment {
@@ -67,7 +67,8 @@ def call(Map pipelineParams) {
                 }
                 steps {
                     sh "$GRADLE_CMD publish closeAndReleaseStagingRepository"
-                    echo "wf publish"
+                    echo "wf publish ${version} ${pipelineParams.scmUrl}"
+                    echo "wf publish ${version}-uberjar ${pipelineParams.scmUrl}"
                 }
             }
         }
