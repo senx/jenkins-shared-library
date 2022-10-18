@@ -23,6 +23,5 @@ def slack(String buildStatus) {
     // Send notifications
     String slackURL = "${params.slackUrl}"
     String payload = "{\"username\": \"${env.JOB_NAME}\",\"attachments\":[{\"title\": \"${env.JOB_NAME} ${buildStatus}\",\"color\": \"${colorCode}\",\"text\": \"${message}\"}]}" as String
-    // sh "curl -X POST -H 'Content-type: application/json' --data '${payload}' ${slackURL}" as String
-    echo "${payload}"
+    sh "curl -X POST -H 'Content-type: application/json' --data '${payload}' ${slackURL}" as String
 }
