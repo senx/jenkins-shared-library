@@ -9,14 +9,9 @@ def call(Map pipelineParams) {
             timestamps()
         }
 
-        parameters {
-            string(name: 'nexusHost', defaultValue: 'http://localhost:8081', description: 'Local Nexus')
-            string(name: 'gpgKeyName', defaultValue: 'BD49DA0A', description: 'GPG key to sign the artifacts')
-        }
-
         environment {
-            GPG_KEY_NAME = "${params.gpgKeyName}"
-            NEXUS_HOST = "${params.nexusHost}"
+            GPG_KEY_NAME = "${env.gpgKeyName}"
+            NEXUS_HOST = "${env.nexusHost}"
             NEXUS_CREDS = credentials('nexus')
             OSSRH_CREDS = credentials('ossrh')
             GRADLE_CMD = './gradlew \
@@ -32,12 +27,12 @@ def call(Map pipelineParams) {
             stage('Checkout') {
                 steps {
                     script {
-                        version = ""
+                        env.version = ""
                         notify.slack('STARTED')
                     }
                     git url: pipelineParams.scmUrl
                     script {
-                        version = gitUtils.getVersion()
+                        env.version = gitUtils.getVersion()
                     }
                 }
             }
@@ -68,8 +63,8 @@ def call(Map pipelineParams) {
                 steps {
                     sh "$GRADLE_CMD publish closeAndReleaseStagingRepository"
                     sh "sleep 2100" // Wait 35 minutes for the components to be available on Maven Central
-                    sh "wf publish ${version} ${pipelineParams.scmUrl}"
-                    sh "wf publish ${version}-uberjar ${pipelineParams.scmUrl}"
+                    sh "wf publish ${env.version} ${pipelineParams.scmUrl}"
+                    sh "wf publish ${env.version}-uberjar ${pipelineParams.scmUrl}"
                 }
             }
         }
