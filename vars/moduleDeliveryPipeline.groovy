@@ -49,7 +49,7 @@ def call(Map pipelineParams) {
                 }
             }
 
-            stage('Publish to:\nLocal Nexus\nMaven Central\nWarpFleet') {
+            stage('Publish to: Local Nexus, Maven Central and, WarpFleet') {
                 when {
                     beforeInput true
                     expression { gitUtils.isTag() }
