@@ -62,9 +62,9 @@ def call(Map pipelineParams) {
                 }
                 steps {
                     sh "$GRADLE_CMD publish closeAndReleaseStagingRepository"
-                    sh "sleep 2100" // Wait 35 minutes for the components to be available on Maven Central
-                    sh "wf publish ${env.version} ${pipelineParams.scmUrl}"
-                    sh "wf publish ${env.version}-uberjar ${pipelineParams.scmUrl}"
+                    sh "sleep 900" // Wait 15 minutes for the components to be available on Maven Central
+                    sh "~/.nvm/current/bin/wf publish ${env.version} ${pipelineParams.scmUrl}"
+                    sh "~/.nvm/current/bin/wf publish ${env.version}-uberjar ${pipelineParams.scmUrl}"
                 }
             }
         }
