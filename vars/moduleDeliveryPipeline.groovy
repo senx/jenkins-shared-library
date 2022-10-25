@@ -64,7 +64,7 @@ def call(Map pipelineParams) {
                     sh "$GRADLE_CMD publish closeAndReleaseStagingRepository"
                     sh "sleep 900" // Wait 15 minutes for the components to be available on Maven Central
                     nvm('version':'v16.18.0') {
-                        sh "wf publish --gpg=${env.warpfleetGPG} --gpgArs='--batch' ${env.version} https://repo.maven.apache.org/maven2"
+                        sh "wf publish --gpg=${env.warpfleetGPG} --gpgArg='--batch' ${env.version} https://repo.maven.apache.org/maven2"
                         sh "wf publish --gpg=${env.warpfleetGPG} --gpgArg='--batch' ${env.version}-uberjar https://repo.maven.apache.org/maven2"
                     }
                 }
