@@ -49,7 +49,7 @@ def call(Map pipelineParams) {
                 }
             }
 
-            stage('Publish to: Local Nexus, Maven Central and, WarpFleet') {
+            stage('Publish to: Local Nexus and Maven Central') {
                 when {
                     beforeInput true
                     expression { gitUtils.isTag() }
@@ -58,11 +58,21 @@ def call(Map pipelineParams) {
                     timeout(time: 4, unit: 'DAYS')
                 }
                 input {
-                    message "Should we deploy module to:\n'Local Nexus',\n'Maven Central',\n and WarpFleet?"
+                    message "Should we deploy module to 'Local Nexus' and 'Maven Central'?"
                 }
                 steps {
                     sh "$GRADLE_CMD publish closeAndReleaseStagingRepository"
+                }
+            }
+
+            stage("Wait for module to be avaible on maven central") {
+                steps {
                     sh "sleep 900" // Wait 15 minutes for the components to be available on Maven Central
+                }
+            }
+
+            stage("Publish to WarpFleet") {
+                steps {
                     nvm('version':'v16.18.0') {
                         sh "wf publish --gpg=${env.warpfleetGPG} --gpgArg='--batch' ${env.version} https://repo.maven.apache.org/maven2"
                         sh "wf publish --gpg=${env.warpfleetGPG} --gpgArg='--batch' ${env.version}-uberjar https://repo.maven.apache.org/maven2"
