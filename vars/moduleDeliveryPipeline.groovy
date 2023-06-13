@@ -67,7 +67,10 @@ def call(Map pipelineParams) {
 
             stage("Wait for module to be avaible on maven central") {
                 steps {
-                    sh "sleep 900" // Wait 15 minutes for the components to be available on Maven Central
+                    // Wait 15 minutes for the components to be available on Maven Central
+                    sh "sleep 900"
+                    // Check if the jar is available on Maven Central, retry if failed 
+                    sh "wget --retry-on-http-error=404 --tries=0 --waitretry=60 https://repo1.maven.org/maven2/io/warp10/${env.JOB_NAME}/${env.version}/${env.JOB_NAME}-${env.version}.jar"
                 }
             }
 
