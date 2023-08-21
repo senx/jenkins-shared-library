@@ -69,8 +69,8 @@ def call(Map pipelineParams) {
                 steps {
                     // Wait 15 minutes for the components to be available on Maven Central
                     sh "sleep 900"
-                    // Check if the jar is available on Maven Central, retry if failed 
-                    sh "wget --retry-on-http-error=404 --tries=0 --waitretry=60 https://repo1.maven.org/maven2/io/warp10/${env.JOB_NAME}/${env.version}/${env.JOB_NAME}-${env.version}.jar"
+                    // Check if the jar is available on Maven Central, retry if failed
+                    sh "while ! curl -s -f https://repo1.maven.org/maven2/io/warp10/${env.JOB_NAME}/${env.version}/${env.JOB_NAME}-${env.version}.jar >/dev/null; do sleep 60; done"
                 }
             }
 
