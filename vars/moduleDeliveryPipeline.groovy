@@ -1,4 +1,4 @@
-def call(Map pipelineParams) {
+def call(Map pipelineParams, Boolean deployOnWarpFleet=true) {
 
     pipeline {
         agent any
@@ -44,6 +44,9 @@ def call(Map pipelineParams) {
             }
 
             stage('Test') {
+                when {
+                    expression { deployOnWarpFleet }
+                }
                 steps {
                     sh "$GRADLE_CMD test"
                 }
@@ -75,6 +78,9 @@ def call(Map pipelineParams) {
             }
 
             stage("Publish to WarpFleet") {
+                when {
+                    expression { deployOnWarpFleet }
+                }
                 steps {
                     nvm('version':'v16.18.0') {
                         sh "wf publish --gpg=${env.warpfleetGPG} --gpgArg='--batch' ${env.version} https://repo.maven.apache.org/maven2"
