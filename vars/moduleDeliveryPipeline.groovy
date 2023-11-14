@@ -62,9 +62,6 @@ def call(Map pipelineParams, Boolean deployOnWarpFleet=true) {
                 }
                 stages {
                     stage('Publish to: Local Nexus and Maven Central') {
-                        when {
-                            beforeInput true
-                        }
                         options {
                             timeout(time: 4, unit: 'DAYS')
                         }
