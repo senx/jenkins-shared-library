@@ -48,15 +48,12 @@ def call(Map pipelineParams, Boolean deployOnWarpFleet=true) {
             }
 
             stage('Test') {
-                when {
-                    expression { deployOnWarpFleet }
-                }
                 steps {
                     sh "$GRADLE_CMD test"
                 }
             }
 
-            stage('Publish') {
+            stage('Publish when tagged') {
                 when {
                     expression { gitUtils.isTag() }
                 }
