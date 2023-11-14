@@ -3,7 +3,6 @@ def getVersion() {
 }
 
 def isTag() {
-    String lastCommit = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
-    String tag = sh(returnStdout: true, script: "git show-ref --tags -d | grep ^${lastCommit} | sed -e 's,.* refs/tags/,,' -e 's/\\^{}//'").trim()
+    String tag = sh(returnStdout: true, script: 'git tag --points-at HEAD').trim()
     return tag != ''
 }
